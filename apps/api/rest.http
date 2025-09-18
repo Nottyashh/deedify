@@ -1,0 +1,378 @@
+### Deedify API Test Collection
+### Use this file with REST Client extension in VS Code
+
+@baseUrl = http://localhost:3000
+@token = your_jwt_token_here
+
+### Health Check
+GET {{baseUrl}}/health
+
+### Get API Version
+GET {{baseUrl}}/health/version
+
+### Database Health Check
+GET {{baseUrl}}/health/database
+
+### Register User
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "role": "INVESTOR",
+  "walletAddress": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+}
+
+### Login User
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123"
+}
+
+### Get User Profile
+GET {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}
+
+### Update User Profile
+POST {{baseUrl}}/auth/profile
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "walletAddress": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM"
+}
+
+### Get All Users (Admin)
+GET {{baseUrl}}/users
+Authorization: Bearer {{token}}
+
+### Get Current User
+GET {{baseUrl}}/users/me
+Authorization: Bearer {{token}}
+
+### Create Listing
+POST {{baseUrl}}/listings
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Beautiful Mountain Property",
+  "description": "Stunning 50-acre property with panoramic mountain views",
+  "locationText": "Aspen, Colorado, United States",
+  "parcelSize": 50.0,
+  "coordinatePolicy": true,
+  "coordinatePolicyNote": "Buyers own a fractional share without exact coordinates",
+  "totalShares": 100,
+  "pricePerShare": 0.25
+}
+
+### Get All Listings
+GET {{baseUrl}}/listings?page=1&limit=10
+
+### Get Public Listings
+GET {{baseUrl}}/listings/public?page=1&limit=10
+
+### Get Listing by ID
+GET {{baseUrl}}/listings/{{listingId}}
+
+### Update Listing
+PATCH {{baseUrl}}/listings/{{listingId}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "title": "Updated Mountain Property",
+  "description": "Updated description"
+}
+
+### Get Listing Shares
+GET {{baseUrl}}/listings/{{listingId}}/shares
+
+### Get Listing Valuation
+GET {{baseUrl}}/listings/{{listingId}}/valuation
+
+### Mint Collection NFT
+POST {{baseUrl}}/nfts/collection
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "listingId": "{{listingId}}",
+  "name": "Mountain Property Collection",
+  "description": "Collection NFT for Mountain Property",
+  "image": "https://api.deedify.com/images/collections/mountain.jpg",
+  "attributes": [
+    {
+      "trait_type": "Location",
+      "value": "Aspen, Colorado"
+    },
+    {
+      "trait_type": "Parcel Size",
+      "value": "50 acres"
+    }
+  ]
+}
+
+### Mint Fractional NFTs
+POST {{baseUrl}}/nfts/fractions
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "listingId": "{{listingId}}",
+  "totalShares": 100,
+  "baseName": "Mountain Property Share",
+  "baseDescription": "Fractional ownership share of Mountain Property",
+  "image": "https://api.deedify.com/images/shares/mountain.jpg",
+  "attributes": [
+    {
+      "trait_type": "Location",
+      "value": "Aspen, Colorado"
+    },
+    {
+      "trait_type": "Parcel Size",
+      "value": "50 acres"
+    }
+  ]
+}
+
+### Get Collection NFT
+GET {{baseUrl}}/nfts/collection/{{listingId}}
+
+### Get Fractional NFTs
+GET {{baseUrl}}/nfts/fractions/{{listingId}}?page=1&limit=10
+
+### Get NFT Metadata
+GET {{baseUrl}}/nfts/metadata/{{mintAddress}}
+
+### List Share for Sale
+POST {{baseUrl}}/marketplace/list
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "shareMint": "{{shareMint}}",
+  "price": 0.3
+}
+
+### Buy Share
+POST {{baseUrl}}/marketplace/buy
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "shareMint": "{{shareMint}}",
+  "buyerWallet": "{{buyerWallet}}"
+}
+
+### Sell Share
+POST {{baseUrl}}/marketplace/sell
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "shareMint": "{{shareMint}}",
+  "price": 0.35
+}
+
+### Cancel Order
+POST {{baseUrl}}/marketplace/cancel
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "orderId": "{{orderId}}"
+}
+
+### Get User Orders
+GET {{baseUrl}}/marketplace/orders
+Authorization: Bearer {{token}}
+
+### Get Order by ID
+GET {{baseUrl}}/marketplace/orders/{{orderId}}
+
+### Get Marketplace Listings
+GET {{baseUrl}}/marketplace/listings?page=1&limit=10
+
+### Get Listing Shares
+GET {{baseUrl}}/marketplace/listings/{{listingId}}/shares?page=1&limit=10
+
+### Get Share History
+GET {{baseUrl}}/marketplace/history/{{shareMint}}?page=1&limit=10
+
+### Get Marketplace Stats
+GET {{baseUrl}}/marketplace/stats
+
+### Create Proposal
+POST {{baseUrl}}/votes/proposals
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "listingId": "{{listingId}}",
+  "title": "Development Proposal",
+  "description": "Proposal to develop the property with sustainable infrastructure",
+  "startsAt": "2024-01-01T00:00:00Z",
+  "endsAt": "2024-01-08T00:00:00Z"
+}
+
+### Get Proposals
+GET {{baseUrl}}/votes/proposals?page=1&limit=10
+
+### Get Proposal by ID
+GET {{baseUrl}}/votes/proposals/{{proposalId}}
+
+### Get Proposal Results
+GET {{baseUrl}}/votes/proposals/{{proposalId}}/results
+
+### Cast Vote
+POST {{baseUrl}}/votes/vote
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "proposalId": "{{proposalId}}",
+  "choice": "YES"
+}
+
+### Get User Votes
+GET {{baseUrl}}/votes/my-votes
+Authorization: Bearer {{token}}
+
+### Get User Vote for Proposal
+GET {{baseUrl}}/votes/proposals/{{proposalId}}/my-vote
+Authorization: Bearer {{token}}
+
+### Close Proposal (Admin)
+POST {{baseUrl}}/votes/proposals/{{proposalId}}/close
+Authorization: Bearer {{token}}
+
+### Get Voting Stats
+GET {{baseUrl}}/votes/stats
+
+### Trigger Payout (Admin)
+POST {{baseUrl}}/payouts/trigger
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "listingId": "{{listingId}}",
+  "reason": "DIVIDEND",
+  "amount": 1.5
+}
+
+### Get Payouts
+GET {{baseUrl}}/payouts?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Get Listing Payouts
+GET {{baseUrl}}/payouts/listing/{{listingId}}?page=1&limit=10
+
+### Get User Payouts
+GET {{baseUrl}}/payouts/user/{{userId}}?page=1&limit=10
+Authorization: Bearer {{token}}
+
+### Get Payout Stats
+GET {{baseUrl}}/payouts/stats
+
+### Initiate KYC
+POST {{baseUrl}}/kyc/initiate
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "userId": "{{userId}}",
+  "email": "test@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "dateOfBirth": "1990-01-01T00:00:00Z",
+  "country": "US"
+}
+
+### Get KYC Status
+GET {{baseUrl}}/kyc/status/{{userId}}
+
+### Get My KYC Status
+GET {{baseUrl}}/kyc/my-status
+Authorization: Bearer {{token}}
+
+### Estimate Property Value
+POST {{baseUrl}}/valuation/estimate
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "location": "Aspen, Colorado, United States",
+  "parcelSize": 50.0,
+  "comps": [
+    {
+      "location": "Denver, Colorado",
+      "size": 45.0,
+      "price": 15000
+    }
+  ],
+  "soilScore": 85,
+  "infraScore": 90
+}
+
+### Get Listing Valuation
+GET {{baseUrl}}/valuation/listing/{{listingId}}
+
+### Refresh Valuation (Admin)
+POST {{baseUrl}}/valuation/refresh/{{listingId}}
+Authorization: Bearer {{token}}
+
+### Get Valuation Stats
+GET {{baseUrl}}/valuation/stats
+
+### Helius Webhook
+POST {{baseUrl}}/webhooks/helius
+Authorization: Bearer webhook_secret
+Content-Type: application/json
+
+{
+  "type": "TRANSFER",
+  "signature": "mock_signature",
+  "slot": 12345,
+  "timestamp": 1640995200,
+  "data": {
+    "from": "seller_wallet",
+    "to": "buyer_wallet",
+    "mint": "nft_mint_address"
+  }
+}
+
+### KYC Webhook
+POST {{baseUrl}}/webhooks/kyc
+Authorization: Bearer webhook_secret
+Content-Type: application/json
+
+{
+  "event": "verification_completed",
+  "verification_id": "veriff_123",
+  "status": "approved",
+  "user_id": "{{userId}}",
+  "data": {
+    "verification_result": "approved"
+  }
+}
+
+### Stripe Webhook
+POST {{baseUrl}}/webhooks/stripe
+Stripe-Signature: t=1640995200,v1=mock_signature
+Content-Type: application/json
+
+{
+  "type": "payment_intent.succeeded",
+  "data": {
+    "object": {
+      "id": "pi_123",
+      "amount": 2500,
+      "currency": "usd"
+    }
+  }
+}
