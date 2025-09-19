@@ -8,6 +8,8 @@ import { PrismaModule } from './common/prisma/prisma.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { ListingsModule } from './listings/listings.module';
+import { OrdersModule } from './orders/orders.module';
+import { HoldingsModule } from './holdings/holdings.module';
 import { NftsModule } from './nfts/nfts.module';
 import { MarketplaceModule } from './marketplace/marketplace.module';
 import { VotesModule } from './votes/votes.module';
@@ -80,6 +82,8 @@ import { HealthModule } from './health/health.module';
     AuthModule,
     UsersModule,
     ListingsModule,
+    OrdersModule,
+    HoldingsModule,
     NftsModule,
     MarketplaceModule,
     VotesModule,

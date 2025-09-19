@@ -22,9 +22,7 @@ async function bootstrap() {
 
   // CORS configuration
   app.enableCors({
-    origin: process.env.NODE_ENV === 'production' 
-      ? [configService.get('FRONTEND_URL', 'http://localhost:3000')]
-      : true,
+    origin: ['http://localhost:3000', 'http://localhost:3001'],
     credentials: true,
   });
 
