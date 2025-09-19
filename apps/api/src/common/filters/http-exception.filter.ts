@@ -35,10 +35,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       }
     } else if (exception instanceof ZodError) {
       status = HttpStatus.BAD_REQUEST;
-      message = exception.errors.map(err => ({
-        field: err.path.join('.'),
-        message: err.message,
-      }));
+      message = exception.errors.map(err => `${err.path.join('.')}: ${err.message}`);
       error = 'Validation Error';
     } else if (exception instanceof Error) {
       status = HttpStatus.INTERNAL_SERVER_ERROR;

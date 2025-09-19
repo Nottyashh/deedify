@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AppConfigService } from '../common/config/config.service';
+import { ConfigService } from '@nestjs/config';
 import { KycProvider } from './kyc.service';
 
 @Injectable()
@@ -8,7 +8,7 @@ export class VeriffAdapter implements KycProvider {
   private readonly apiKey: string;
   private readonly baseUrl = 'https://stationapi.veriff.com/v1';
 
-  constructor(private configService: AppConfigService) {
+  constructor(private configService: ConfigService) {
     this.apiKey = this.configService.get('KYC_API_KEY');
     if (!this.apiKey) {
       throw new Error('KYC_API_KEY is required for Veriff integration');

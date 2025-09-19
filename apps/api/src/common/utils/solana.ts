@@ -1,7 +1,8 @@
 import { Connection, PublicKey, Keypair, Transaction } from '@solana/web3.js';
 import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
 import { Umi } from '@metaplex-foundation/umi';
-import { AppConfigService } from '../config/config.service';
+import { ConfigService } from '@nestjs/config';
+import bs58 from 'bs58';
 
 /**
  * Solana connection factory using Helius RPC
@@ -11,10 +12,10 @@ export class SolanaService {
   private umi: Umi;
   private mintAuthority: Keypair;
 
-  constructor(private configService: AppConfigService) {
+  constructor(private configService: ConfigService) {
     // Initialize Solana connection
     this.connection = new Connection(
-      this.configService.heliusRpcUrl,
+      this.configService.get('HELIUS_RPC_URL'),
       {
         commitment: 'confirmed',
         confirmTransactionInitialTimeout: 60000,
@@ -22,12 +23,12 @@ export class SolanaService {
     );
 
     // Initialize Umi for Metaplex operations
-    this.umi = createUmi(this.configService.heliusRpcUrl);
+    this.umi = createUmi(this.configService.get('HELIUS_RPC_URL'));
 
     // Initialize mint authority keypair
     try {
-      const secretKey = this.configService.mintAuthSecret;
-      const secretKeyBytes = Buffer.from(secretKey, 'base58');
+      const secretKey = this.configService.get('MINT_AUTH_SECRET');
+      const secretKeyBytes = bs58.decode(secretKey);
       this.mintAuthority = Keypair.fromSecretKey(secretKeyBytes);
     } catch (error) {
       throw new Error('Invalid MINT_AUTH_SECRET format. Must be base58 encoded private key.');
@@ -50,7 +51,7 @@ export class SolanaService {
    * Get the authority public key for Metaplex operations
    */
   getAuthorityPublicKey(): PublicKey {
-    return new PublicKey(this.configService.metaplexAuthority);
+    return new PublicKey(this.configService.get('METAPLEX_AUTHORITY'));
   }
 
   /**
@@ -65,16 +66,8 @@ export class SolanaService {
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const signature = await this.connection.sendAndConfirmTransaction(
-          transaction,
-          signers,
-          {
-            commitment: 'confirmed',
-            skipPreflight: false,
-            preflightCommitment: 'confirmed',
-          }
-        );
-
+        const signature = await this.connection.sendTransaction(transaction, signers);
+        await this.connection.confirmTransaction(signature, 'confirmed');
         return signature;
       } catch (error) {
         lastError = error as Error;
@@ -137,6 +130,6 @@ export class SolanaService {
 /**
  * Factory function to create Solana service instance
  */
-export function createSolanaService(configService: AppConfigService): SolanaService {
+export function createSolanaService(configService: ConfigService): SolanaService {
   return new SolanaService(configService);
 }

@@ -1,5 +1,6 @@
 import { PublicKey } from '@solana/web3.js';
 import { createUmi } from '@metaplex-foundation/umi-bundle-defaults';
+import { Umi, publicKey } from '@metaplex-foundation/umi';
 import { findMetadataPda, findMasterEditionPda } from '@metaplex-foundation/mpl-token-metadata';
 
 /**
@@ -153,7 +154,8 @@ export class IdUtils {
    */
   static createMetadataPda(mint: PublicKey): PublicKey {
     const umi = createUmi('https://api.devnet.solana.com'); // Dummy URL for PDA generation
-    return findMetadataPda(umi, { mint }).publicKey;
+    const mintUmi = publicKey(mint.toBase58());
+    return new PublicKey(findMetadataPda(umi, { mint: mintUmi })[0]);
   }
 
   /**
@@ -161,6 +163,7 @@ export class IdUtils {
    */
   static createMasterEditionPda(mint: PublicKey): PublicKey {
     const umi = createUmi('https://api.devnet.solana.com'); // Dummy URL for PDA generation
-    return findMasterEditionPda(umi, { mint }).publicKey;
+    const mintUmi = publicKey(mint.toBase58());
+    return new PublicKey(findMasterEditionPda(umi, { mint: mintUmi })[0]);
   }
 }

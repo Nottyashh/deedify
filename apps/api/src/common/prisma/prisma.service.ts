@@ -8,21 +8,11 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   constructor() {
     super({
       log: [
-        { level: 'query', emit: 'event' },
         { level: 'error', emit: 'stdout' },
         { level: 'info', emit: 'stdout' },
         { level: 'warn', emit: 'stdout' },
       ],
     });
-
-    // Log queries in development
-    if (process.env.NODE_ENV === 'development') {
-      this.$on('query', (e) => {
-        this.logger.debug(`Query: ${e.query}`);
-        this.logger.debug(`Params: ${e.params}`);
-        this.logger.debug(`Duration: ${e.duration}ms`);
-      });
-    }
   }
 
   async onModuleInit() {
@@ -44,8 +34,6 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
    * Clean disconnect for graceful shutdown
    */
   async enableShutdownHooks(app: any) {
-    this.$on('beforeExit', async () => {
-      await app.close();
-    });
+    // Graceful shutdown handled by NestJS
   }
 }

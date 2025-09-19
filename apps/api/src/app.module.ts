@@ -28,32 +28,9 @@ import { HealthModule } from './health/health.module';
 
     // Logging
     LoggerModule.forRoot({
-      pinoHttp: {
-        level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
-        transport: process.env.NODE_ENV === 'production' 
-          ? undefined 
-          : {
-              target: 'pino-pretty',
-              options: {
-                colorize: true,
-                translateTime: 'SYS:standard',
-                ignore: 'pid,hostname',
-              },
-            },
-        serializers: {
-          req: (req) => ({
-            method: req.method,
-            url: req.url,
-            headers: {
-              'user-agent': req.headers['user-agent'],
-              'content-type': req.headers['content-type'],
-            },
-          }),
-          res: (res) => ({
-            statusCode: res.statusCode,
-          }),
-        },
-      },
+      pinoHttp: { 
+        transport: { target: 'pino-pretty' } 
+      }
     }),
 
     // Rate limiting
@@ -66,11 +43,9 @@ import { HealthModule } from './health/health.module';
 
     // Redis/BullMQ for background jobs
     BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379'),
-        password: process.env.REDIS_PASSWORD,
-      },
+      connection: { 
+        url: process.env.REDIS_URL || 'redis://localhost:6379' 
+      }
     }),
 
     // Database
@@ -79,16 +54,16 @@ import { HealthModule } from './health/health.module';
     // Feature modules
     AuthModule,
     UsersModule,
-    ListingsModule,
-    NftsModule,
-    MarketplaceModule,
-    VotesModule,
-    PayoutsModule,
-    WebhooksModule,
-    KycModule,
-    StorageModule,
-    ValuationModule,
     HealthModule,
+    // ListingsModule,
+    // NftsModule,
+    // MarketplaceModule,
+    // VotesModule,
+    // PayoutsModule,
+    // WebhooksModule,
+    // KycModule,
+    // StorageModule,
+    // ValuationModule,
   ],
 })
 export class AppModule {}

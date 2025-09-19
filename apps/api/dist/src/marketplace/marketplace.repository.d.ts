@@ -1,0 +1,110 @@
+import { PrismaService } from '../common/prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+export declare class MarketplaceRepository {
+    private prisma;
+    constructor(prisma: PrismaService);
+    findMany(args?: Prisma.OrderFindManyArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }[]>;
+    findUnique(args: Prisma.OrderFindUniqueArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+    findFirst(args: Prisma.OrderFindFirstArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+    create(args: Prisma.OrderCreateArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+    update(args: Prisma.OrderUpdateArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+    delete(args: Prisma.OrderDeleteArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+    count(args?: Prisma.OrderCountArgs): Promise<number>;
+    aggregate(args: Prisma.OrderAggregateArgs): Promise<Prisma.GetOrderAggregateType<{
+        where?: Prisma.OrderWhereInput;
+        orderBy?: Prisma.OrderOrderByWithRelationInput | Prisma.OrderOrderByWithRelationInput[];
+        cursor?: Prisma.OrderWhereUniqueInput;
+        take?: number;
+        skip?: number;
+        _count?: true | Prisma.OrderCountAggregateInputType;
+        _avg?: Prisma.OrderAvgAggregateInputType;
+        _sum?: Prisma.OrderSumAggregateInputType;
+        _min?: Prisma.OrderMinAggregateInputType;
+        _max?: Prisma.OrderMaxAggregateInputType;
+    }>>;
+    upsert(args: Prisma.OrderUpsertArgs): Promise<{
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        status: import("@prisma/client").$Enums.OrderStatus;
+        type: import("@prisma/client").$Enums.OrderType;
+        listingId: string;
+        price: Prisma.Decimal;
+        txSignature: string | null;
+        shareMint: string;
+        sellerId: string | null;
+        buyerId: string | null;
+    }>;
+}

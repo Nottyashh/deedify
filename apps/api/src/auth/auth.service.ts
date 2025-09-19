@@ -7,8 +7,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../common/prisma/prisma.service';
-import { AppConfigService } from '../common/config/config.service';
 import * as bcrypt from 'bcrypt';
 
 export interface AuthenticatedUser {
@@ -27,7 +27,7 @@ export class AuthService {
   constructor(
     private prisma: PrismaService,
     private jwtService: JwtService,
-    private configService: AppConfigService,
+    private configService: ConfigService,
   ) {}
 
   async register(data: {
